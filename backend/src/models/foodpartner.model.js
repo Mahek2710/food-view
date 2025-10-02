@@ -16,6 +16,7 @@ const foodPartnerSchema = new mongoose.Schema({
     }
 });
 
-const foodPartnerModel = mongoose.model('foodpartner', foodPartnerSchema);
+// ✅ Change: use mongoose.models cache to prevent OverwriteModelError
+const foodPartnerModel = mongoose.models.foodpartner || mongoose.model('foodpartner', foodPartnerSchema);
 
 module.exports = foodPartnerModel;
