@@ -14,6 +14,12 @@ router.post('/', authMiddleware.authFoodPartnerMiddleware,
     foodController.createFood);
 
 
+/* GET /api/food [protected] */
+
+router.get("/",
+    authMiddleware.authUserMiddleware,
+    foodController.getFoodItems);
+
 
 
 module.exports = router;
