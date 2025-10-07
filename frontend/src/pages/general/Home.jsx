@@ -4,43 +4,69 @@ import '../../styles/reels.css'
 import ReelFeed from '../../components/ReelFeed'
 
 const Home = () => {
-    const [ videos, setVideos ] = useState([])
-    // Autoplay behavior is handled inside ReelFeed
+    const [videos, setVideos] = useState([]);
 
     useEffect(() => {
         axios.get("http://localhost:3000/api/food", { withCredentials: true })
             .then(response => {
-
-                console.log(response.data);
-
-                setVideos(response.data.foodItems)
+                // Ensure likeCount and savesCount are numbers
+                const foodItems = response.data.foodItems.map(item => ({
+                    ...item,
+                    likeCount: item.likeCount || 0,
+                    savesCount: item.savesCount || 0
+                }));
+                setVideos(foodItems);
             })
-            .catch(() => { /* noop: optionally handle error */ })
-    }, [])
-
-    // Using local refs within ReelFeed; keeping map here for dependency parity if needed
+            .catch(err => console.error("Error fetching food items:", err));
+    }, []);
 
     async function likeVideo(item) {
+        try {
+            const response = await axios.post(
+                "http://localhost:3000/api/food/like",
+                { foodId: item._id },
+                { withCredentials: true }
+            );
 
-        const response = await axios.post("http://localhost:3000/api/food/like", { foodId: item._id }, {withCredentials: true})
+            setVideos((prev) => prev.map((v) => {
+                if (v._id !== item._id) return v;
+                const currentCount = v.likeCount || 0;
+                return {
+                    ...v,
+                    likeCount: response.data.like
+                        ? currentCount + 1
+                        : Math.max(currentCount - 1, 0) // prevent negative
+                };
+            }));
 
-        if(response.data.like){
-            console.log("Video liked");
-            setVideos((prev) => prev.map((v) => v._id === item._id ? { ...v, likeCount: v.likeCount + 1 } : v))
-        }else{
-            console.log("Video unliked");
-            setVideos((prev) => prev.map((v) => v._id === item._id ? { ...v, likeCount: v.likeCount - 1 } : v))
+            console.log(response.data.like ? "Video liked" : "Video unliked");
+        } catch (err) {
+            console.error("Error liking video:", err);
         }
-        
     }
 
     async function saveVideo(item) {
-        const response = await axios.post("http://localhost:3000/api/food/save", { foodId: item._id }, { withCredentials: true })
-        
-        if(response.data.save){
-            setVideos((prev) => prev.map((v) => v._id === item._id ? { ...v, savesCount: v.savesCount + 1 } : v))
-        }else{
-            setVideos((prev) => prev.map((v) => v._id === item._id ? { ...v, savesCount: v.savesCount - 1 } : v))
+        try {
+            const response = await axios.post(
+                "http://localhost:3000/api/food/save",
+                { foodId: item._id },
+                { withCredentials: true }
+            );
+
+            setVideos((prev) => prev.map((v) => {
+                if (v._id !== item._id) return v;
+                const currentCount = v.savesCount || 0;
+                return {
+                    ...v,
+                    savesCount: response.data.save
+                        ? currentCount + 1
+                        : Math.max(currentCount - 1, 0) // prevent negative
+                };
+            }));
+
+            console.log(response.data.save ? "Video saved" : "Video unsaved");
+        } catch (err) {
+            console.error("Error saving video:", err);
         }
     }
 
@@ -51,7 +77,7 @@ const Home = () => {
             onSave={saveVideo}
             emptyMessage="No videos available."
         />
-    )
+    );
 }
 
-export default Home
+export default Home;
