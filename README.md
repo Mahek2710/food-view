@@ -1,6 +1,3 @@
-Absolutely! Here’s a **Git-ready, copy-paste version** of the README for your LettuceEat project. You can directly save it as `README.md` in your repo:
-
-````markdown
 # 🍴 LettuceEat
 
 **LettuceEat** is a modern web app for food enthusiasts to **browse trending food reels**. Think TikTok for food—users can discover delicious meals through short videos and connect with food partners who create them.
@@ -74,62 +71,3 @@ npm run dev
 # Start frontend
 cd ../frontend
 npm run dev
-````
-
----
-
-## 📱 App Features in Detail
-
-* **Authentication**: Separate flows for users and food partners, JWT-based authentication, protected routes
-* **Video Feed**: Infinite scroll, auto-play, like/save functionality, direct navigation to food partner profiles
-* **Food Partner Dashboard**: Profile management, video upload with preview, business metrics, customer engagement tracking
-* **UI/UX**: Responsive design, dark mode support, smooth animations, touch-friendly interface, accessible components
-* **Security**: HTTP-only cookies, protected API endpoints, input validation, secure file uploads, CORS configuration
-
----
-
-## 🔄 API Endpoints
-
-**Authentication**
-
-* `POST /api/auth/user/register` – Register new user
-* `POST /api/auth/user/login` – User login
-* `POST /api/auth/food-partner/register` – Register food partner
-* `POST /api/auth/food-partner/login` – Food partner login
-
-**Food**
-
-* `POST /api/food` – Create new food post
-* `GET /api/food` – Get food feed
-* `POST /api/food/like` – Like/unlike food
-* `POST /api/food/save` – Save/unsave food
-* `GET /api/food/save` – Get saved foods
-
-**Food Partner**
-
-* `GET /api/food-partner/:id` – Get food partner profile
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Fork the repo, create a branch, and submit a pull request.
-
----
-
-## 📝 License
-
-MIT License – see `LICENSE` file for details.
-
----
-
-## 🙏 Acknowledgements
-
-* Vite
-* React
-* MongoDB
-* ImageKit
-
-```
-
-
